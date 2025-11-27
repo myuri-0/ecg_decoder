@@ -25,7 +25,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log("✅ Email:", email, "Password:", password);
+      console.log("Email:", email, "Password:", password);
       // Здесь будет вызов API для авторизации
     }
   };

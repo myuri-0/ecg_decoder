@@ -1,3 +1,157 @@
-export default function History() {
-  return <div>История</div>;
-}
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const EcgResearchPage = () => {
+  const navigate = useNavigate();
+
+  const [lastname, setLastname] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [middlename, setMiddlename] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [file, setFile] = useState(null);
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      alert("Выберите файл ЭКГ");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("lastname", lastname);
+    formData.append("firstname", firstname);
+    formData.append("middlename", middlename);
+    formData.append("birthdate", birthdate);
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("http://localhost:8000/upload-ecg", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        alert("Ошибка загрузки");
+        return;
+      }
+
+      const data = await res.json();
+
+      // image_base64 — строка с base64 png от backend
+      setImageSrc(`data:image/png;base64,${data.image_base64}`);
+
+      setIsSubmitted(true);
+    } catch (e) {
+      console.error(e);
+      alert("Ошибка соединения");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 relative p-4">
+
+      {/* Кнопка назад */}
+      <button
+        className="absolute top-4 left-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md"
+        onClick={() => navigate("/mainpage")}
+      >
+        Назад
+      </button>
+
+      {/* Личный кабинет */}
+      <button
+        className="absolute top-4 right-4 bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-md"
+        onClick={() => navigate("/profile")}
+      >
+        Личный кабинет
+      </button>
+
+      <div className="flex flex-col items-center mt-20 px-4">
+
+        {/* Заголовок */}
+        <h1 className="text-3xl font-bold mb-4">Анализ ЭКГ</h1>
+
+        {/* Описание */}
+        <p className="text-gray-700 mb-8">
+          Для проведения анализа выберите файл ЭКГ при помощи кнопки загрузить
+        </p>
+
+        {/* Форма */}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-md rounded-lg p-6 w-full max-w-xl space-y-4"
+        >
+          {/* ФИО */}
+          <input
+            type="text"
+            placeholder="Фамилия"
+            value={lastname}
+            disabled={isSubmitted}
+            onChange={(e) => setLastname(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+
+          <input
+            type="text"
+            placeholder="Имя"
+            value={firstname}
+            disabled={isSubmitted}
+            onChange={(e) => setFirstname(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+
+          <input
+            type="text"
+            placeholder="Отчество"
+            value={middlename}
+            disabled={isSubmitted}
+            onChange={(e) => setMiddlename(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+
+          {/* Дата рождения */}
+          <input
+            type="date"
+            value={birthdate}
+            disabled={isSubmitted}
+            onChange={(e) => setBirthdate(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+
+          {/* Файл */}
+          <input
+            type="file"
+            accept=".png,.jpg,.jpeg,.pdf,.ecg,.txt,.dat"
+            disabled={isSubmitted}
+            onChange={(e) => setFile(e.target.files[0])}
+            className="w-full"
+          />
+
+          {/* Кнопка отправки */}
+          {!isSubmitted && (
+            <button
+              type="submit"
+              className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md"
+            >
+              Загрузить и анализировать
+            </button>
+          )}
+        </form>
+
+        {/* PNG изображение результата */}
+        {imageSrc && (
+          <div className="mt-10 bg-white shadow-md p-4 rounded-lg">
+            <img src={imageSrc} alt="ECG result" className="max-w-full" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default EcgResearchPage;

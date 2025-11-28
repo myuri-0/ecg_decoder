@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import MainPage from "./MainPage";
+import Profile from "./Profile";
+import Explore from "./Explore";
+import History from "./History";
+import Faq from "./Faq";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
@@ -23,7 +27,7 @@ function App() {
           path="/explore"
           element={
             <ProtectedRoute>
-              <div>Страница Исследовать ЭКГ</div>
+              <Explore/>
             </ProtectedRoute>
           }
         />
@@ -31,7 +35,7 @@ function App() {
           path="/history"
           element={
             <ProtectedRoute>
-              <div>История</div>
+              <History/>
             </ProtectedRoute>
           }
         />
@@ -39,7 +43,7 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <div>Личный кабинет</div>
+              <Profile />
             </ProtectedRoute>
           }
         />
@@ -47,7 +51,7 @@ function App() {
           path="/faq"
           element={
             <ProtectedRoute>
-              <div>FAQ</div>
+              <Faq/>
             </ProtectedRoute>
           }
         />

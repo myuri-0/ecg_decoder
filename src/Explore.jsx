@@ -42,10 +42,9 @@ const EcgResearchPage = () => {
 
       const data = await res.json();
 
-      // image_base64 — строка с base64 png от backend
       setImageSrc(`data:image/png;base64,${data.image_base64}`);
-
       setIsSubmitted(true);
+
     } catch (e) {
       console.error(e);
       alert("Ошибка соединения");
@@ -76,7 +75,6 @@ const EcgResearchPage = () => {
         {/* Заголовок */}
         <h1 className="text-3xl font-bold mb-4">Анализ ЭКГ</h1>
 
-        {/* Описание */}
         <p className="text-gray-700 mb-8">
           Для проведения анализа выберите файл ЭКГ при помощи кнопки загрузить
         </p>
@@ -86,7 +84,6 @@ const EcgResearchPage = () => {
           onSubmit={handleSubmit}
           className="bg-white shadow-md rounded-lg p-6 w-full max-w-xl space-y-4"
         >
-          {/* ФИО */}
           <input
             type="text"
             placeholder="Фамилия"
@@ -114,7 +111,7 @@ const EcgResearchPage = () => {
             className="w-full px-4 py-2 border rounded-md"
           />
 
-          {/* Дата рождения */}
+          {/* Дата */}
           <input
             type="date"
             value={exam_date}
@@ -126,13 +123,12 @@ const EcgResearchPage = () => {
           {/* Файл */}
           <input
             type="file"
-            accept=".png,.jpg,.jpeg,.pdf,.ecg,.txt,.dat,.mat"
+            accept=".mat"
             disabled={isSubmitted}
             onChange={(e) => setFile(e.target.files[0])}
             className="w-full"
           />
 
-          {/* Кнопка отправки */}
           {!isSubmitted && (
             <button
               type="submit"
@@ -143,12 +139,28 @@ const EcgResearchPage = () => {
           )}
         </form>
 
-        {/* PNG изображение результата */}
+        {/* PNG изображение */}
         {imageSrc && (
-          <div className="mt-10 bg-white shadow-md p-4 rounded-lg">
+          <div className="mt-10 bg-white shadow-md p-4 rounded-lg max-w-2xl">
             <img src={imageSrc} alt="ECG result" className="max-w-full" />
           </div>
         )}
+
+        {/* Блок описания */}
+        {isSubmitted && (
+          <div className="mt-8 bg-white shadow-md p-6 rounded-lg max-w-2xl w-full">
+            <h2 className="text-2xl font-semibold mb-4">Описание</h2>
+
+            <p className="text-gray-800 leading-relaxed whitespace-pre-line">
+              Ритм – синусовый{"\n"}
+              ЧСС – 71 в сек{"\n"}
+              ЭОС – Повернута влево{"\n"}
+              Тестовое описание ЭКГ{"\n"}
+              Диагноз – норма
+            </p>
+          </div>
+        )}
+
       </div>
     </div>
   );

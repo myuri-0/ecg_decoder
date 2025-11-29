@@ -7,7 +7,7 @@ const EcgResearchPage = () => {
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
   const [middlename, setMiddlename] = useState("");
-  const [birthdate, setBirthdate] = useState("");
+  const [exam_date, setBirthdate] = useState("");
   const [file, setFile] = useState(null);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -22,10 +22,10 @@ const EcgResearchPage = () => {
     }
 
     const formData = new FormData();
-    formData.append("lastname", lastname);
-    formData.append("firstname", firstname);
-    formData.append("middlename", middlename);
-    formData.append("birthdate", birthdate);
+    formData.append("last_name", lastname);
+    formData.append("first_name", firstname);
+    formData.append("middle_name", middlename);
+    formData.append("exam_date", exam_date);
     formData.append("file", file);
 
     try {
@@ -117,7 +117,7 @@ const EcgResearchPage = () => {
           {/* Дата рождения */}
           <input
             type="date"
-            value={birthdate}
+            value={exam_date}
             disabled={isSubmitted}
             onChange={(e) => setBirthdate(e.target.value)}
             className="w-full px-4 py-2 border rounded-md"
@@ -126,7 +126,7 @@ const EcgResearchPage = () => {
           {/* Файл */}
           <input
             type="file"
-            accept=".png,.jpg,.jpeg,.pdf,.ecg,.txt,.dat"
+            accept=".png,.jpg,.jpeg,.pdf,.ecg,.txt,.dat,.mat"
             disabled={isSubmitted}
             onChange={(e) => setFile(e.target.files[0])}
             className="w-full"

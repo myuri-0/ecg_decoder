@@ -16,7 +16,13 @@ export default function ProtectedRoute({ children }) {
   }, []);
 
   if (authorized === null) {
-    return <div className="text-center mt-10">Загрузка...</div>;
+    return (
+      <div className="app-shell flex min-h-screen items-center justify-center px-4">
+        <div className="panel px-6 py-5 text-center">
+          <p className="text-sm font-medium text-slate-700">Проверяем доступ...</p>
+        </div>
+      </div>
+    );
   }
 
   return authorized ? children : <Navigate to="/" />;
